@@ -80,6 +80,19 @@ table 82561 "ADLSE Table"
             ObsoleteReason = 'This field will be removed in a future release because readuncommitted will be the default behavior because of performance.';
             ToolTip = 'Specifies how this table should be processed during export. Standard uses normal processing, Ignore Read Isolation disables read isolation for performance, and Commit Externally uses external commit for large tables.';
         }
+        // Dynapro added for Unger
+        field(82560; "Enable All Fields"; Boolean)
+        {
+            Caption = 'Enable All Fields';
+            DataClassification = CustomerContent;
+            ToolTip = 'Specifies whether all fields in the table are enabled for export.';
+
+            trigger OnValidate()
+            begin
+                SetAllFieldsEnabled();
+            end;
+        }
+        // Dynapro added for Unger. End
     }
 
     keys
@@ -158,9 +171,11 @@ table 82561 "ADLSE Table"
         Rec.Init();
         Rec."Table ID" := TableID;
         Rec.Enabled := true;
+        Rec."Enable All Fields" := true; // Dynapro added for Unger
         Rec.Insert(true);
 
         AddPrimaryKeyFields();
+        SetAllFieldsEnabled(); // Dynapro added for Unger
         ADLSEExternalEvents.OnAddTable(Rec);
     end;
 
@@ -392,6 +407,25 @@ table 82561 "ADLSE Table"
                 end;
             until Field.Next() = 0;
     end;
+    // Dynapro added for Unger. Start
+    local procedure SetAllFieldsEnabled()
+    var
+        ADLSEField: Record "ADLSE Field";
+    begin
+        ADLSEField.InsertForTable(Rec);
+
+        if Rec."Enable All Fields" then begin
+            ADLSEField.SetRange("Table ID", Rec."Table ID");
+            if ADLSEField.FindSet(true) then
+                repeat
+                    if ADLSEField.CanFieldBeEnabled() then begin
+                        ADLSEField.Enabled := true;
+                        ADLSEField.Modify(true);
+                    end;
+                until ADLSEField.Next() = 0;
+        end;
+    end;
+    // Dynapro added for Unger. End
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterResetSelected(ADLSETable: Record "ADLSE Table")

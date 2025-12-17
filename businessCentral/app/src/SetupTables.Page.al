@@ -30,6 +30,17 @@ page 82561 "ADLSE Setup Tables"
                     Editable = true;
                     Caption = 'Enabled';
                 }
+                // Dynapro added for Unger
+                field("Enable All Fields"; Rec."Enable All Fields")
+                {
+                    ApplicationArea = All;
+
+                    trigger OnValidate()
+                    begin
+                        CurrPage.Update();
+                    end;
+                }
+                // Dynapro added for Unger. End
                 field(FieldsChosen; NumberFieldsChosenValue)
                 {
                     ApplicationArea = All;
