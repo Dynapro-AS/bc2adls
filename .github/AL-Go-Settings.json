@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v8.1/.Modules/settings.schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v8.2/.Modules/settings.schema.json",
   "ActionsRepo": "Dynapro-AS/bc2adls",
   "ActionsRef": "main",
   "type": "PTE",
@@ -23,5 +23,5 @@
     ],
     "continuousDeployment": true
   },
-  "templateSha": "2b0291277622df06df2856bc05768be2ebb5a6b5"
+  "templateSha": "62683d6c71618bc3249ff55a950fd8ab3a380925"
 }
